@@ -13,9 +13,11 @@ Number = int | float
 #     when `numbers` is empty
 def max(numbers: Sequence[Number]) -> Number | None:
     """Finds the item in numbers with the highest value"""
-    if len(numbers) < 1:
+    try:
+        max_value = numbers[0]
+    except IndexError:
+        print("The sequence of numbers provided is empty.")
         return None
-    max_value = numbers[0]
     for value in numbers:
         if max_value < value:
             max_value = value
@@ -45,8 +47,11 @@ def mode(numbers: Sequence) -> tuple[Number, ...]:
 # Change so that a non-existent or unreadable file returns an empty list of strings
 def load_file(filename: str) -> list[str]:
     """Read in a file and return its contents"""
-    with open(filename, 'r') as txtfile:
-        contents = [line.rstrip() for line in txtfile]
+    try:
+        with open(filename, 'r') as txtfile:
+            contents = [line.rstrip() for line in txtfile]
+    except (PermissionError, FileNotFoundError):
+        contents = ['']
     return contents
   
 
@@ -72,6 +77,9 @@ def scytale(message: str, diameter: int, decrypt: bool = False) -> str:
 
 
 if __name__ == "__main__":
+    max(())
+    print(max((5, 7, 1, 2, 3)))
+    # scytale("The quick brown fox jumped over the lazy dog", 4)
     pass
     # Write a few excample cases for each function,
     #     and put them in a try/except statement
