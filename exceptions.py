@@ -14,13 +14,12 @@ Number = int | float
 def max(numbers: Sequence[Number]) -> Number | None:
     """Finds the item in numbers with the highest value"""
     if len(numbers) < 1:
-        return None
+        raise ValueError('numbers sequence is empty')
     max_value = numbers[0]
     for value in numbers:
         if max_value < value:
             max_value = value
     return max_value
-
 
 # Change so an appropriate exception is raised with a helpful message
 #     when numbers is empty, and use exception handling to initialize
@@ -28,10 +27,13 @@ def max(numbers: Sequence[Number]) -> Number | None:
 def mode(numbers: Sequence) -> tuple[Number, ...]:
     """Returns a tuple of the most frequently appearing members of numbers"""
     if len(numbers) < 1:
-        raise ValueError
+        raise ValueError('numbers sequence is empty')
     counter: dict[Number, int] = {}
     for number in numbers:
-        counter[number] = counter[number] + 1
+        try:
+            counter[number] = counter[number] + 1
+        except Exception:
+            counter[number] = 1
     sorted_numbers = sorted(counter.keys(), key=lambda x: counter[x], reverse=True)
     mode_count = counter[sorted_numbers[0]]
     mode: tuple = ()
@@ -41,14 +43,15 @@ def mode(numbers: Sequence) -> tuple[Number, ...]:
         mode = mode + (number,)
     return mode
 
-
 # Change so that a non-existent or unreadable file returns an empty list of strings
 def load_file(filename: str) -> list[str]:
     """Read in a file and return its contents"""
-    with open(filename, 'r') as txtfile:
-        contents = [line.rstrip() for line in txtfile]
-    return contents
-  
+    try:
+        with open(filename, 'r') as txtfile:
+            contents = [line.rstrip() for line in txtfile]
+            return contents
+    except FileNotFoundError:
+        return []
 
 # This scytale function doesn't work. Try debugging it using Pycharm's debugger
 def scytale(message: str, diameter: int, decrypt: bool = False) -> str:
@@ -73,5 +76,5 @@ def scytale(message: str, diameter: int, decrypt: bool = False) -> str:
 
 if __name__ == "__main__":
     pass
-    # Write a few excample cases for each function,
+    # Write a few example cases for each function,
     #     and put them in a try/except statement
