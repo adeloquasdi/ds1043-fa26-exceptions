@@ -14,7 +14,7 @@ Number = int | float
 def max(numbers: Sequence[Number]) -> Number | None:
     """Finds the item in numbers with the highest value"""
     if len(numbers) < 1:
-        return None
+        raise ValueError("max() argument must have at least one number")
     max_value = numbers[0]
     for value in numbers:
         if max_value < value:
@@ -28,10 +28,13 @@ def max(numbers: Sequence[Number]) -> Number | None:
 def mode(numbers: Sequence) -> tuple[Number, ...]:
     """Returns a tuple of the most frequently appearing members of numbers"""
     if len(numbers) < 1:
-        raise ValueError
+        raise ValueError("mode() argument must have at least one number")
     counter: dict[Number, int] = {}
     for number in numbers:
-        counter[number] = counter[number] + 1
+        try:
+            counter[number] += 1
+        except KeyError:
+            counter[number] = 1
     sorted_numbers = sorted(counter.keys(), key=lambda x: counter[x], reverse=True)
     mode_count = counter[sorted_numbers[0]]
     mode: tuple = ()
@@ -72,6 +75,7 @@ def scytale(message: str, diameter: int, decrypt: bool = False) -> str:
 
 
 if __name__ == "__main__":
+    print(max(numbers = []))
     pass
     # Write a few excample cases for each function,
     #     and put them in a try/except statement
