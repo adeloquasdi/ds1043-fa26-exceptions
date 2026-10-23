@@ -11,10 +11,10 @@ Number = int | float
 
 # Change so an appropriate exception is raised with a helpful message
 #     when `numbers` is empty
-def max(numbers: Sequence[Number]) -> Number | None:
+def max(numbers: Sequence[Number]) -> Number:
     """Finds the item in numbers with the highest value"""
     if len(numbers) < 1:
-        raise ValueError('sequence numbers is empty')
+        raise ValueError('max() sequence argument is empty')
     max_value = numbers[0]
     for value in numbers:
         if max_value < value:
@@ -28,10 +28,13 @@ def max(numbers: Sequence[Number]) -> Number | None:
 def mode(numbers: Sequence) -> tuple[Number, ...]:
     """Returns a tuple of the most frequently appearing members of numbers"""
     if len(numbers) < 1:
-        raise ValueError('sequence numbers is empty')
+        raise ValueError('mode() sequence argument is empty')
     counter: dict[Number, int] = {}
     for number in numbers:
-        counter[number] = counter[number] + 1
+        try:
+            counter[number] = counter[number] + 1
+        except KeyError:
+            counter[number] = 1
     sorted_numbers = sorted(counter.keys(), key=lambda x: counter[x], reverse=True)
     mode_count = counter[sorted_numbers[0]]
     mode: tuple = ()
@@ -45,11 +48,11 @@ def mode(numbers: Sequence) -> tuple[Number, ...]:
 # Change so that a non-existent or unreadable file returns an empty list of strings
 def load_file(filename: str) -> list[str]:
     """Read in a file and return its contents"""
-    if FileExistsError or FileNotFoundError:
-        contents = []
-    else:
+    try:
         with open(filename, 'r') as txtfile:
             contents = [line.rstrip() for line in txtfile]
+    except (FileNotFoundError, PermissionError, FileExistsError):
+        contents = []
     return contents
   
 
@@ -78,3 +81,5 @@ if __name__ == "__main__":
     pass
     # Write a few excample cases for each function,
     #     and put them in a try/except statement
+    print(mode([1,1,1,2,2,2,3]))
+
